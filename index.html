@@ -7,65 +7,57 @@
   <title>India Ride</title>
   <style>
     body {
-      margin: 0;
-      padding: 20px;
       font-family: Arial, sans-serif;
-      background: #eef3f8;
-      color: #172033;
+      background: #f1f5f9;
+      text-align: center;
+      padding: 20px;
     }
     .card {
-      max-width: 420px;
-      margin: 30px auto;
-      padding: 24px;
       background: white;
-      border-radius: 18px;
-      box-shadow: 0 4px 18px #0001;
+      padding: 24px;
+      border-radius: 16px;
+      max-width: 400px;
+      margin: 30px auto;
     }
-    h1 { color: #087f5b; text-align: center; }
-    p { text-align: center; }
+    h1 { color: #087443; }
     input, button {
-      box-sizing: border-box;
       width: 100%;
-      padding: 14px;
-      margin-top: 12px;
-      border-radius: 9px;
+      padding: 12px;
+      margin: 8px 0;
+      box-sizing: border-box;
+      border-radius: 8px;
       font-size: 16px;
     }
-    input { border: 1px solid #bbb; }
+    input { border: 1px solid #ccc; }
     button {
-      border: 0;
-      background: #087f5b;
+      background: #087443;
       color: white;
-      font-weight: bold;
+      border: none;
     }
-    #result { overflow-wrap: anywhere; }
   </style>
 </head>
 <body>
   <div class="card">
-    <h1>🚗 India Ride</h1>
-    <p>आपकी यात्रा, आपका किराया!</p>
+    <h1>India Ride 🚗</h1>
+    <p>पूरे भारत में अपनी कार यात्रा खोजें</p>
     <input id="from" placeholder="कहाँ से जाना है?">
     <input id="to" placeholder="कहाँ जाना है?">
     <input id="date" type="date">
-    <button onclick="bookRide()">यात्रा की जानकारी देखें</button>
+    <button onclick="searchRide()">राइड खोजें</button>
     <p id="result"></p>
   </div>
   <script>
-    function bookRide() {
+    function searchRide() {
       const from = document.getElementById('from').value.trim();
       const to = document.getElementById('to').value.trim();
-      const date = document.getElementById('date').value;
-      const result = document.getElementById('result');
-
       if (!from || !to) {
-        result.textContent = 'कृपया जाने की जगह और गंतव्य भरें।';
+        document.getElementById('result').textContent =
+          'कृपया शुरू और गंतव्य स्थान भरें।';
         return;
       }
-
-      result.textContent = 'यात्रा: ' + from + ' से ' + to +
-        (date ? ' | तारीख: ' + date : '') +
-        '। ड्राइवर के ऑफर की सुविधा अगले चरण में जुड़ेगी।';
+      document.getElementById('result').textContent =
+        from + ' से ' + to +
+        ' तक की राइड के लिए अनुरोध तैयार है।';
     }
   </script>
 </body>
