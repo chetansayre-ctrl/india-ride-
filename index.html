@@ -1,0 +1,72 @@
+
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>India Ride</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+      background: #eef3f8;
+      color: #172033;
+    }
+    .card {
+      max-width: 420px;
+      margin: 30px auto;
+      padding: 24px;
+      background: white;
+      border-radius: 18px;
+      box-shadow: 0 4px 18px #0001;
+    }
+    h1 { color: #087f5b; text-align: center; }
+    p { text-align: center; }
+    input, button {
+      box-sizing: border-box;
+      width: 100%;
+      padding: 14px;
+      margin-top: 12px;
+      border-radius: 9px;
+      font-size: 16px;
+    }
+    input { border: 1px solid #bbb; }
+    button {
+      border: 0;
+      background: #087f5b;
+      color: white;
+      font-weight: bold;
+    }
+    #result { overflow-wrap: anywhere; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>🚗 India Ride</h1>
+    <p>आपकी यात्रा, आपका किराया!</p>
+    <input id="from" placeholder="कहाँ से जाना है?">
+    <input id="to" placeholder="कहाँ जाना है?">
+    <input id="date" type="date">
+    <button onclick="bookRide()">यात्रा की जानकारी देखें</button>
+    <p id="result"></p>
+  </div>
+  <script>
+    function bookRide() {
+      const from = document.getElementById('from').value.trim();
+      const to = document.getElementById('to').value.trim();
+      const date = document.getElementById('date').value;
+      const result = document.getElementById('result');
+
+      if (!from || !to) {
+        result.textContent = 'कृपया जाने की जगह और गंतव्य भरें।';
+        return;
+      }
+
+      result.textContent = 'यात्रा: ' + from + ' से ' + to +
+        (date ? ' | तारीख: ' + date : '') +
+        '। ड्राइवर के ऑफर की सुविधा अगले चरण में जुड़ेगी।';
+    }
+  </script>
+</body>
+</html>
