@@ -76,4 +76,50 @@
     });
   </script>
 </body>
+<script type="module">
+import { createClient } from
+  'https://esm.sh/@supabase/supabase-js@2';
+
+const SUPABASE_URL =
+  'https://paynpassvcvjvlytfuod.supabase.co';
+
+const SUPABASE_KEY =
+  'YAHAN_APNI_PUBLISHABLE_KEY_DALEIN';
+
+const supabase = createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+document.getElementById('rideForm')
+  .addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const message = document.getElementById('message');
+    message.textContent = 'बुकिंग भेजी जा रही है...';
+
+    const booking = {
+      customer_name: document.getElementById('name').value.trim(),
+      pickup_location: document.getElementById('pickup').value.trim(),
+      drop_location: document.getElementById('drop').value.trim(),
+      customer_phone: document.getElementById('phone').value.trim() || null,
+      status: 'pending'
+    };
+
+    const { error } = await supabase
+      .from('ride_bookings')
+      .insert(booking);
+
+    if (error) {
+      message.textContent = 'बुकिंग नहीं हुई: ' + error.message;
+      return;
+    }
+
+    message.textContent = 'बुकिंग सफलतापूर्वक भेजी गई!';
+    document.getElementById('rideForm').reset();
+  });
+</script>
+</body>
+</html>
+
 </html>
