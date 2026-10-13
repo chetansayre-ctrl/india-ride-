@@ -4,122 +4,123 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>India Ride - कार बुकिंग</title>
+  <title>India Ride</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       background: #f2f6ff;
-      margin: 0;
       padding: 20px;
-      color: #172554;
+      margin: 0;
     }
-    .card {
-      max-width: 450px;
-      margin: 20px auto;
-      padding: 22px;
+    .container {
+      max-width: 420px;
+      margin: 25px auto;
       background: white;
-      border-radius: 16px;
-      box-shadow: 0 4px 18px #0001;
+      padding: 22px;
+      border-radius: 14px;
+      box-shadow: 0 3px 12px #ccc;
     }
-    h1 { text-align: center; color: #14532d; }
+    h1 { color: #1455c0; text-align: center; }
     p { text-align: center; }
-    label { display: block; margin-top: 15px; font-weight: bold; }
+    label { display: block; margin-top: 14px; }
     input, button {
       box-sizing: border-box;
       width: 100%;
-      padding: 13px;
-      margin-top: 7px;
+      padding: 12px;
+      margin-top: 6px;
       border-radius: 8px;
       font-size: 16px;
     }
     input { border: 1px solid #bbb; }
     button {
-      border: 0;
-      background: #15803d;
+      margin-top: 20px;
+      background: #1455c0;
       color: white;
+      border: none;
       font-weight: bold;
-      margin-top: 22px;
     }
-    #message { color: #166534; }
+    #message { overflow-wrap: anywhere; }
   </style>
 </head>
 <body>
-  <div class="card">
-    <h1>🇮🇳 India Ride</h1>
-    <p>पूरे भारत में अपनी कार यात्रा की बुकिंग शुरू करें</p>
+  <div class="container">
+    <h1>India Ride 🚗</h1>
+    <p>पूरे भारत में अपनी यात्रा की बुकिंग करें</p>
 
     <form id="rideForm">
-      <label for="name">आपका नाम</label>
-      <input id="name" required placeholder="अपना नाम लिखें">
+      <label>आपका नाम</label>
+      <input id="name" required maxlength="100"
+        placeholder="अपना नाम लिखें">
 
-      <label for="pickup">कहाँ से जाना है?</label>
-      <input id="pickup" required placeholder="जैसे नागपुर">
+      <label>कहाँ से जाना है?</label>
+      <input id="pickup" required maxlength="150"
+        placeholder="जैसे नागपुर">
 
-      <label for="drop">कहाँ जाना है?</label>
-      <input id="drop" required placeholder="जैसे पुणे">
+      <label>कहाँ जाना है?</label>
+      <input id="drop" required maxlength="150"
+        placeholder="जैसे पुणे">
 
-      <label for="phone">मोबाइल नंबर</label>
-      <input id="phone" type="tel" placeholder="मोबाइल नंबर">
+      <label>मोबाइल नंबर (वैकल्पिक)</label>
+      <input id="phone" type="tel"
+        placeholder="मोबाइल नंबर">
 
-      <button type="submit">बुकिंग अनुरोध करें</button>
+      <button id="submitButton" type="submit">
+        बुकिंग भेजें
+      </button>
     </form>
 
-    <p id="message"></p>
-    <p>ड्राइवर अपना किराया बताएँगे।</p>
+    <p id="message" aria-live="polite"></p>
   </div>
 
-  <script>
-    document.getElementById("rideForm").addEventListener("submit", function(e) {
-      e.preventDefault();
-      document.getElementById("message").textContent =
-        "आपका फॉर्म तैयार है। बुकिंग भेजने की सुविधा अगले चरण में जोड़ी जाएगी।";
+  <script type="module">
+    import { createClient } from
+      'https://esm.sh/@supabase/supabase-js@2';
+
+    const SUPABASE_URL =
+      'https://paynpassvcvjvlytfuod.supabase.co';
+
+    const SUPABASE_KEY =
+      'YAHAN_APNI_PUBLISHABLE_KEY_DALEIN';
+
+    const supabase = createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY
+    );
+
+    const form = document.getElementById('rideForm');
+    const message = document.getElementById('message');
+    const button = document.getElementById('submitButton');
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      button.disabled = true;
+      message.textContent = 'बुकिंग भेजी जा रही है...';
+
+      try {
+        const booking = {
+          customer_name: document.getElementById('name').value.trim(),
+          pickup_location: document.getElementById('pickup').value.trim(),
+          drop_location: document.getElementById('drop').value.trim(),
+          customer_phone: document.getElementById('phone').value.trim() || null,
+          status: 'pending'
+        };
+
+        const { error } = await supabase
+          .from('ride_bookings')
+          .insert(booking);
+
+        if (error) throw error;
+
+        message.textContent = 'बुकिंग सफलतापूर्वक भेजी गई!';
+        form.reset();
+      } catch (error) {
+        message.textContent =
+          'बुकिंग नहीं हुई। कृपया Publishable Key और इंटरनेट जाँचें।';
+        console.error(error);
+      } finally {
+        button.disabled = false;
+      }
     });
   </script>
 </body>
-<script type="module">
-import { createClient } from
-  'https://esm.sh/@supabase/supabase-js@2';
-
-const SUPABASE_URL =
-  'https://paynpassvcvjvlytfuod.supabase.co';
-
-const SUPABASE_KEY =
-  'YAHAN_APNI_PUBLISHABLE_KEY_DALEIN';
-
-const supabase = createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY
-);
-
-document.getElementById('rideForm')
-  .addEventListener('submit', async function(e) {
-    e.preventDefault();
-
-    const message = document.getElementById('message');
-    message.textContent = 'बुकिंग भेजी जा रही है...';
-
-    const booking = {
-      customer_name: document.getElementById('name').value.trim(),
-      pickup_location: document.getElementById('pickup').value.trim(),
-      drop_location: document.getElementById('drop').value.trim(),
-      customer_phone: document.getElementById('phone').value.trim() || null,
-      status: 'pending'
-    };
-
-    const { error } = await supabase
-      .from('ride_bookings')
-      .insert(booking);
-
-    if (error) {
-      message.textContent = 'बुकिंग नहीं हुई: ' + error.message;
-      return;
-    }
-
-    message.textContent = 'बुकिंग सफलतापूर्वक भेजी गई!';
-    document.getElementById('rideForm').reset();
-  });
-</script>
-</body>
-</html>
-
 </html>
