@@ -2,132 +2,78 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>India Ride</title>
-<style>
-body{font-family:Arial,sans-serif;background:#f1f5f9;margin:0;padding:16px;color:#172033}
-header{background:#087443;color:white;text-align:center;padding:20px;border-radius:16px}
-.card{background:white;padding:18px;border-radius:14px;margin:16px 0;box-shadow:0 2px 8px #ddd}
-input,select,button{width:100%;padding:13px;margin:7px 0;box-sizing:border-box;border:1px solid #ccc;border-radius:8px;font-size:16px}
-button{background:#087443;color:white;border:0;font-weight:bold}
-.offer{border:1px solid #cbd5e1;border-radius:12px;padding:14px;margin:12px 0}
-.price{color:#087443;font-size:22px;font-weight:bold}
-small{color:#64748b}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>India Ride - कार बुकिंग</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f2f6ff;
+      margin: 0;
+      padding: 20px;
+      color: #172554;
+    }
+    .card {
+      max-width: 450px;
+      margin: 20px auto;
+      padding: 22px;
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 4px 18px #0001;
+    }
+    h1 { text-align: center; color: #14532d; }
+    p { text-align: center; }
+    label { display: block; margin-top: 15px; font-weight: bold; }
+    input, button {
+      box-sizing: border-box;
+      width: 100%;
+      padding: 13px;
+      margin-top: 7px;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+    input { border: 1px solid #bbb; }
+    button {
+      border: 0;
+      background: #15803d;
+      color: white;
+      font-weight: bold;
+      margin-top: 22px;
+    }
+    #message { color: #166534; }
+  </style>
 </head>
 <body>
-<header>
-<h1>🚗 India Ride</h1>
-<p>पूरे भारत में अपनी कार यात्रा खोजें</p>
-</header>
+  <div class="card">
+    <h1>🇮🇳 India Ride</h1>
+    <p>पूरे भारत में अपनी कार यात्रा की बुकिंग शुरू करें</p>
 
-<div class="card">
-<h2>यात्री की जानकारी</h2>
-<form id="rideForm">
-<label>आपका नाम</label>
-<input id="name" placeholder="अपना नाम लिखें" required>
+    <form id="rideForm">
+      <label for="name">आपका नाम</label>
+      <input id="name" required placeholder="अपना नाम लिखें">
 
-<label>मोबाइल नंबर</label>
-<input id="phone" type="tel" inputmode="numeric"
-placeholder="10 अंकों का मोबाइल नंबर" pattern="[0-9]{10}" required>
+      <label for="pickup">कहाँ से जाना है?</label>
+      <input id="pickup" required placeholder="जैसे नागपुर">
 
-<label>कहाँ से जाना है?</label>
-<input id="from" placeholder="जैसे: नागपुर" required>
+      <label for="drop">कहाँ जाना है?</label>
+      <input id="drop" required placeholder="जैसे पुणे">
 
-<label>कहाँ जाना है?</label>
-<input id="to" placeholder="जैसे: पुणे" required>
+      <label for="phone">मोबाइल नंबर</label>
+      <input id="phone" type="tel" placeholder="मोबाइल नंबर">
 
-<label>यात्रा की तारीख</label>
-<input id="date" type="date" required>
+      <button type="submit">बुकिंग अनुरोध करें</button>
+    </form>
 
-<label>कितने यात्री हैं?</label>
-<select id="people">
-<option>1</option><option>2</option><option>3</option>
-<option>4</option><option>5</option><option>6</option>
-</select>
+    <p id="message"></p>
+    <p>ड्राइवर अपना किराया बताएँगे।</p>
+  </div>
 
-<button type="submit">ड्राइवर के ऑफर देखें</button>
-</form>
-</div>
-
-<div class="card" id="results" hidden>
-<h2>🚘 ड्राइवरों के किराये के ऑफर</h2>
-<p id="route"></p>
-<p><small>ये डेमो ऑफर हैं, असली ड्राइवरों के ऑफर नहीं।</small></p>
-<div id="offers"></div>
-</div>
-
-<div class="card" id="confirmation" hidden>
-<h2>आपका चुना हुआ ऑफर</h2>
-<div id="chosen"></div>
-<button onclick="window.print()">बुकिंग विवरण सेव / प्रिंट करें</button>
-</div>
-
-<script>
-const $ = id => document.getElementById(id);
-
-const drivers = [
- {name:"राजेश कुमार",car:"सेडान कार",price:3200,rating:"4.8"},
- {name:"संदीप यादव",car:"हैचबैक कार",price:2800,rating:"4.6"},
- {name:"अमित सिंह",car:"SUV कार",price:4000,rating:"4.9"}
-];
-
-$("rideForm").addEventListener("submit",function(e){
- e.preventDefault();
-
- const from=$("from").value.trim();
- const to=$("to").value.trim();
-
- if(from.toLowerCase()===to.toLowerCase()){
-  alert("शुरुआत और गंतव्य अलग-अलग भरें।");
-  return;
- }
-
- $("route").textContent=from+" से "+to+
- " | तारीख: "+$("date").value+
- " | यात्री: "+$("people").value;
-
- $("offers").innerHTML="";
-
- drivers.forEach((d,i)=>{
-  const item=document.createElement("div");
-  item.className="offer";
-
-  const title=document.createElement("h3");
-  title.textContent=d.name;
-
-  const car=document.createElement("p");
-  car.textContent=d.car+" | ⭐ "+d.rating;
-
-  const price=document.createElement("p");
-  price.className="price";
-  price.textContent="₹"+d.price;
-
-  const btn=document.createElement("button");
-  btn.textContent="यह ऑफर चुनें";
-  btn.addEventListener("click",()=>chooseDriver(i));
-
-  item.append(title,car,price,btn);
-  $("offers").appendChild(item);
- });
-
- $("results").hidden=false;
- $("confirmation").hidden=true;
- $("results").scrollIntoView({behavior:"smooth"});
-});
-
-function chooseDriver(i){
- const d=drivers[i];
- $("chosen").textContent=
- $("name").value+" जी, आपने "+d.name+
- " का ₹"+d.price+" वाला डेमो ऑफर चुना है। "+
- $("from").value+" से "+$("to").value+
- " तक, तारीख "+$("date").value+"।";
-
- $("confirmation").hidden=false;
- $("confirmation").scrollIntoView({behavior:"smooth"});
-}
-</script>
+  <script>
+    document.getElementById("rideForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      document.getElementById("message").textContent =
+        "आपका फॉर्म तैयार है। बुकिंग भेजने की सुविधा अगले चरण में जोड़ी जाएगी।";
+    });
+  </script>
 </body>
-</html> 
+</html>
