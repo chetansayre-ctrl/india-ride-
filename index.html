@@ -61,7 +61,8 @@
         placeholder="जैसे पुणे">
 
       <label>मोबाइल नंबर (वैकल्पिक)</label>
-      <input id="phone" type="tel"
+      <input id="phone" type="tel" maxlength="15"
+        inputmode="tel" autocomplete="tel"
         placeholder="मोबाइल नंबर">
 
       <button id="submitButton" type="submit">
@@ -114,9 +115,9 @@
         message.textContent = 'बुकिंग सफलतापूर्वक भेजी गई!';
         form.reset();
       } catch (error) {
-        message.textContent =
-          'बुकिंग नहीं हुई। कृपया Publishable Key और इंटरनेट जाँचें।';
-        console.error(error);
+        const detail = error?.message || 'कृपया इंटरनेट और Supabase सेटिंग जाँचें।';
+        message.textContent = 'बुकिंग नहीं हुई: ' + detail;
+        console.error('India Ride booking error:', error);
       } finally {
         button.disabled = false;
       }
